@@ -93,7 +93,7 @@ mod tests {
         let system_tx: SystemTransaction = json_tx.clone().try_into().unwrap();
 
         let system_tx_hash = hex::encode(system_tx.transaction_hash().unwrap());
-        let expected_hash = "26c649c0d4373ff1c3b6e129d531843af085ed3ce75ebf588766d811268a385a";
+        let expected_hash = "a7fe87da3a226ce6da3a70c724ff617fdf16f850161dcc997fbbf6695deb7940";
         let json_tx_hash = hex::encode(json_tx.transaction_hash().unwrap());
 
         assert_eq!(system_tx_hash, expected_hash);

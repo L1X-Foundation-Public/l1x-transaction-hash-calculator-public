@@ -79,7 +79,7 @@ pub enum ContractType {
 
 impl Transaction {
     pub fn as_bytes(&self) -> Result<Vec<u8>> {
-        match serde_json::to_vec(self) {
+        match bincode::serialize(self) {
             Ok(bytes) => Ok(bytes),
             Err(e) => Err(anyhow!("Error: {:?}", e)),
         }
