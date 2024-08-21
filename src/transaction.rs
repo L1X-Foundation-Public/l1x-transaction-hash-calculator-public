@@ -7,28 +7,31 @@ use crate::types::{
 use anyhow::{anyhow, Error, Result};
 use sha3::{Digest, Keccak256};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct TransactionV1 {
-    pub nonce: Nonce,
-    pub transaction_type: TransactionType,
-    pub fee_limit: Balance,
-    #[serde(with = "serde_bytes")]
-    pub signature: SignatureBytes,
-    #[serde(with = "serde_bytes")]
-    pub verifying_key: VerifyingKeyBytes,
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum TransactionVersion {
+	V1 = 1,
+	V2,
+	V3,
+}
+
+impl Default for TransactionVersion {
+    fn default() -> Self {
+        Self::V3
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Transaction {
-    pub nonce: Nonce,
-    pub transaction_type: TransactionType,
-    pub fee_limit: Balance,
-    #[serde(with = "serde_bytes")]
-    pub signature: SignatureBytes,
-    #[serde(with = "serde_bytes")]
-    pub verifying_key: VerifyingKeyBytes,
-    #[serde(with = "serde_bytes")]
-    pub eth_original_transaction: Option<Vec<u8>>,
+	pub version: TransactionVersion,
+	pub nonce: Nonce,
+	pub transaction_type: TransactionType,
+	pub fee_limit: Balance,
+	#[serde(with = "serde_bytes")]
+	pub signature: SignatureBytes,
+	#[serde(with = "serde_bytes")]
+	pub verifying_key: VerifyingKeyBytes,
+	#[serde(with = "serde_bytes")]
+	pub eth_original_transaction: Option<Vec<u8>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -110,19 +113,6 @@ impl TryInto<ContractType> for i8 {
             1 => Ok(ContractType::EVM),
             2 => Ok(ContractType::XTALK),
             _ => Err(anyhow!("Invalid contract type {}", self)),
-        }
-    }
-}
-
-impl From<TransactionV1> for Transaction {
-    fn from(value: TransactionV1) -> Self {
-        Self {
-            nonce: value.nonce,
-            transaction_type: value.transaction_type,
-            fee_limit: value.fee_limit,
-            signature: value.signature,
-            verifying_key: value.verifying_key,
-            eth_original_transaction: None,
         }
     }
 }

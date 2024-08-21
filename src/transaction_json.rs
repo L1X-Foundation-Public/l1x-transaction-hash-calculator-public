@@ -3,6 +3,7 @@ use serde::Deserialize;
 
 use crate::transaction::Transaction as SystemTransaction;
 use crate::transaction::TransactionType as SystemTransactionType;
+use crate::transaction::TransactionVersion;
 use crate::types as sys_types;
 
 #[derive(Debug, Deserialize, Clone)]
@@ -41,6 +42,7 @@ impl TryInto<SystemTransaction> for TransactionJson {
 
     fn try_into(self) -> Result<SystemTransaction, Error> {
         Ok(SystemTransaction {
+            version: TransactionVersion::default(),
             fee_limit: sys_types::Balance::from_str_radix(&self.fee_limit, 10)
                 .map_err(|e| anyhow!("Can't convert 'fee_limit' from string: {e}"))?,
             nonce: sys_types::Nonce::from_str_radix(&self.nonce, 10)
@@ -77,23 +79,23 @@ mod tests {
     #[test]
     fn test_hash() {
         let json_str = r#"{
-            "nonce":"133",
+            "fee_limit":"1000000",
+            "nonce":"297",
+            "signature":[56,186,206,101,14,96,243,26,67,59,102,94,181,124,10,232,29,124,161,242,216,31,195,45,75,60,218,169,206,116,107,81,89,143,94,
+                        251,30,214,208,192,173,136,5,133,209,205,183,250,163,89,22,22,75,10,30,7,125,137,29,237,172,9,147,96],
             "transaction_type":{
                 "NativeTokenTransfer":{
-                    "address":[122,64,57,150,93,21,42,221,43,160,66,48,160,2,195,85,183,91,181,41],
-                    "amount":"1147999999999999999998"
+                    "address":[59,100,123,70,201,186,79,202,34,28,207,147,60,9,182,83,194,180,88,31],
+                    "amount":"1"
                 }
             },
-            "fee_limit":"1",
-            "signature":[34,54,100,37,247,5,225,23,153,23,235,35,200,149,5,23,52,252,209,150,80,174,206,155,44,14,219,210,198,203,27,2,52,204,43,
-                         58,168,179,19,179,234,121,114,234,235,29,208,27,243,69,68,89,201,15,147,97,26,250,86,43,203,24,126,159],
-            "verifying_key":[2,183,104,192,77,23,63,57,139,219,110,116,87,123,254,13,12,156,181,235,101,159,183,130,67,203,111,83,132,17,97,184,33]
+            "verifying_key":[2,151,109,120,119,219,158,64,102,159,235,19,99,3,150,218,222,126,4,92,210,104,221,83,230,134,100,127,247,122,126,66,164]
         }"#;
         let json_tx: TransactionJson = serde_json::from_str(&json_str).unwrap();
         let system_tx: SystemTransaction = json_tx.clone().try_into().unwrap();
 
         let system_tx_hash = hex::encode(system_tx.transaction_hash().unwrap());
-        let expected_hash = "a7fe87da3a226ce6da3a70c724ff617fdf16f850161dcc997fbbf6695deb7940";
+        let expected_hash = "1a2b4a6e280bfff6773da10c3d02e732ad22a6644a4b544112b44b440aced95c";
         let json_tx_hash = hex::encode(json_tx.transaction_hash().unwrap());
 
         assert_eq!(system_tx_hash, expected_hash);
