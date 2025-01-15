@@ -1,8 +1,26 @@
-The tool calculates the hash value of the provided transaction and prints it to stdout
+# L1X Transaction Hash Tool
 
-### How to build
+A lightweight command-line utility for calculating transaction hash values in the L1X blockchain ecosystem.
+
+## 📋 Overview
+
+The `l1x-tx-hash-tool` takes a JSON-formatted transaction as input and generates its corresponding hash value, which is essential for transaction verification and signing processes in the L1X blockchain.
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Rust toolchain (latest stable version)
+- Cargo package manager
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone [repository-url]
+cd l1x-tx-hash-tool
+
+# Build the release version
 cargo build --release
 ```
 
