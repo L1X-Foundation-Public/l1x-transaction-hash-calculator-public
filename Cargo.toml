@@ -1,5 +1,5 @@
 [package]
-name = "l1x-transaction-hash"
+name = "l1x-tx-hash-tool"
 version = "0.1.2"
 edition = "2021"
 license = "Polyform-Perimeter-1.0.0"

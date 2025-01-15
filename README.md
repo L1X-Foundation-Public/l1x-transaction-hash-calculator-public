@@ -27,7 +27,7 @@ cargo build --release
 ### How to run
 
 ```bash
-./target/release/l1x-transaction-hash --json 'your_json_string'
+./target/release/l1x-tx-hash-tool --json 'your_json_string'
 ```
 
 ### Errors
@@ -35,7 +35,7 @@ cargo build --release
 If the tool fails, it prints an error and exits with non zero exit code
 
 ```bash
-./target/release/l1x-transaction-hash --json '{' ; echo $?
+./target/release/l1x-tx-hash-tool --json '{' ; echo $?
 ```
 
 **Output:**
@@ -47,7 +47,7 @@ Error: Can't parse json str: EOF while parsing an object at line 1 column 1
 ### Example
 
 ```bash
-./target/release/l1x-transaction-hash --json '{
+./target/release/l1x-tx-hash-tool --json '{
     "nonce":"133",
     "transaction_type":{
         "NativeTokenTransfer":{
